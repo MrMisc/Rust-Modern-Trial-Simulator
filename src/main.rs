@@ -122,22 +122,27 @@ mod trial {
         countable = 0; //reset countable to just record number of sit down rolls until termination of session
         let mut falsecount: u32 = 0;
         let mut f_star: bool = false;
-        let mut series_true: u8 = 0; //for 100+ method series
+        let mut series_true: u32 = 0; //for 100+ method series
         let mut falsecount_is_on: bool = true; //for method 3 class
         // let over100par: u8 = (method%10) as u8; //last digit for 100+ series now instead denotes number of successive successes required to get free win
-        let over100par: u8 = match method{
-            100000..  => ((method/10)%10).try_into().unwrap(),
-            _ => (method%10).try_into().unwrap(),
+        let over100par: u32 = match method{
+            100000..  => (method/10)%10,
+            _ => method%10,
         };
         // M series vars
         let mut repeat_counter: i8 = 0- (((method/1000)%100) as i8);
         let factor: f64 = ((method/100000) as f64)/100.0;
+        
+        
+        // println!("Factor is {}", factor);
         let uppermclass: u8 = match method/100000{
             100.. => 2,  // we multiply by prob
             1..=99 => 1,  // we add by prob
             _ => 0, //we don't change prob
         };
         loop {
+            
+                        
             //Special condition for method 3 class
             if (method>100 && (method/100)%10==3) || (method<100 && method%10==3){
                 falsecount_is_on = false;
@@ -168,42 +173,49 @@ mod trial {
                 if falsecount >= falsecap {
                     break;
                 }
-            } 
+            }                 
             //Methods 1-3 use * to denote 'unfallable' stages.
+            // println!("Method is {}",method);    
             let ref_lastrun: usize = lastrun.clone() as usize; //turning level parameter into usable index for vector
             money += money_tree[ref_lastrun];
-            if !secondlaststate_in && !laststate_in  {//pity system: fail 2 times in a row, you go up. 
+            if !secondlaststate_in && !laststate_in  && (method<1000 && method%100 < 10) || (method>=100000 && method%10==1){//pity system: fail 2 times in a row, you go up. 
                 //pity system revoked for methods above 9.
                 //changed method < 10 to method %100 <10 to include user behaviours in "modified pity system automatic rewards" - 100+ series shall reward successive successes with 1 free win, and
                 //100-109 this way should be including pity system where you fail twice leads to one free win
 
                 //**Above has been applicable only for up to 100+ series, NOT for M series. In M series, first digit  is a binary switch indicating if pity system is active or not (pity v1 that is - 2 fails , 1 win )
-                if (method<1000 && method%100 < 10) || (method>=100000 && method%10==1){
-                    laststate_in = true;
+                laststate_in = true;
                 secondlaststate_in = false;
                 countable += 1;
                 lastrun+=1;
                 f_star=false;
-            }
+
             }else if method>=100 && over100par != 0 && series_true == over100par{ //success check system for method 100+
                 series_true=0;//reset counter
                 lastrun+=1; //auto success
                 countable+=1;//counts as a roll as well
-
-            } else {
+            }else {
                 secondlaststate_in = laststate_in;
                 let maximum = match repeat_counter{
                     1.. => repeat_counter,
                     _ => 0,
                 };
-                if uppermclass==2{
-                    laststate_in = trial(listofprobs_f[ref_lastrun]*factor.powf(maximum as f64));
-                }
-                else if uppermclass==1{
-                    laststate_in = trial(listofprobs_f[ref_lastrun]+factor*(maximum as f64));
-                }else{
-                    laststate_in = trial(listofprobs_f[ref_lastrun]);
-                }
+                let probability: f64 ={ 
+                    if uppermclass==2{
+                        listofprobs_f[ref_lastrun]*factor.powf(maximum as f64)
+                    // println!("We are a 10M class method requesting that we use {} instead of {}, by multiplying {}, and we got {}, our repeat counter is {} versus the par to compare being {}", listofprobs_f[ref_lastrun]*factor.powf(maximum as f64), listofprobs_f[ref_lastrun],factor.powf(maximum as f64), laststate_in,repeat_counter,(((method/1000)%100) as i8));
+                    }
+                    else if uppermclass==1{
+                        listofprobs_f[ref_lastrun]+factor*(maximum as f64)
+                    
+                    // println!("We are a 1M class method requesting that we use {} instead of {} by adding {}, and we got {}, our repeat counter is {} versus the par to compare being {}", listofprobs_f[ref_lastrun]+factor*(maximum as f64), listofprobs_f[ref_lastrun], factor*(maximum as f64),laststate_in, repeat_counter,(((method/1000)%100) as i8));
+                    }   
+                    else {
+                        listofprobs_f[ref_lastrun]
+                    }
+                };
+                // println!("Level is {}, at probability {}",lastrun, probability);                            
+                laststate_in = trial(probability);
                 if laststate_in {
                     //if level success AND it is not a compounding boom test level
                     //determine if this is on a compounding stage ("boom test")
@@ -274,6 +286,7 @@ mod trial {
                     if falsecount_is_on{falsecount += 1;}
                     countable += 1;
                     series_true=0;
+                    repeat_counter+=1;
                     if (method <5 && method < 100) || (method%100<5 && method >= 100) {
                         secondlaststate_in = true;
                     }
@@ -290,6 +303,8 @@ mod trial {
             lastrun == terminate,
         )
     }
+
+
     //Let us create a fresh, simulator programme that we can simply call to run an atomic trial to iterative success! Only 1 trial though. Simulating multiple trials requires looping this!
     pub fn simulate(
         method: u32,
@@ -318,6 +333,8 @@ mod trial {
                 result_table.4,
                 falsecap,
             );
+
+            // dbg!( result_table2);
             result_table = (
                 result_table2.0,
                 result_table.1 + result_table2.1,
@@ -389,7 +406,7 @@ mod trial {
 fn main() {
 
     //file input
-    let mut file = File::open("./takeme.json").unwrap();
+    let mut file = File::open("./output.json").unwrap();
     let mut buff = String::new();
     file.read_to_string(&mut buff).unwrap();
 
@@ -419,8 +436,15 @@ fn main() {
     let falsecap_input = [data.simulation1.falsecap, data.simulation2.falsecap];
     let mut trials = data.trials;
     let duration = Instant::now();
+    dbg!(method_input);
+    // println!("Number of trials is {}",trials);
+    // dbg!("Methods taken were{}", method_input);
     if trials < 1000000 {
         for _i in 0..trials {
+            // println!("We are on trial repetition {} right now",_i);
+            // println!("Singlethreadprocess activated...");
+            // println!("Method being inputted is");
+            // dbg!(method_input);
             let entries = trial::simulate_doublethread(
                 method_input,
                 runs_input,
@@ -439,6 +463,8 @@ fn main() {
         }
     } else {
         trials /= 8;
+        // println!("Method being inputted is");
+        // dbg!(method_input);        
         std::thread::scope(|s| {
             let probably = probs_input.clone();
             let money_ = moneytree_input.clone();
