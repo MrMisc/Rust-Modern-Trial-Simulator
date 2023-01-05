@@ -24,8 +24,24 @@ Finally, there are either 1,2 or above 3 remaining digits that make up the metho
 However, if there are more than 2 digits, this tells the code that we are to multiply the trial's probability with the % amount provided.
 
 
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
+
+
 ### Quick examples
 
 So for eg, if you choose 1003100 as your method, this means that for any fixed trial, if the seed fails more than 3 times, +10% is applied to the trial in question until success is achieved.
 
 In comparison, 11003100, is meant to indicate that the same trial at which this seed has failed, will have its probability multiplied by 1.1 continuously, until success.
+
+
+
+
+
+
