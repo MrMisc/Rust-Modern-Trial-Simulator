@@ -85,7 +85,32 @@ So for eg, if you choose 1003100 as your method, this means that for any fixed t
 In comparison, 11003100, is meant to indicate that the same trial at which this seed has failed, will have its probability multiplied by 1.1 continuously, until success.
 
 
+### Case Scenario 1
+
+Let us compare 2 trial systems with the same probability and monetary scheme - 0.05,0.005*,0.005*, where each trial costs say, 1 dollar.
+
+Both use NO scheme except for pity system v2. Everything else is off. No user behaviour is considered either.
+
+**Scheme 1**: A probability of 0.05 is added everytime the seed fails above 5 consecutive times.
+**Scheme 2**: The probability of the trial is multiplied by 3 everytime the seed fails 3 consecutive times.
+
+This results in the methods being 
+
+505400 for simulation 1, and 30003400 for simulation 2. The 4 in both can be replaced with anything else as long as it is not within the set {1,2,3}.
+
+Let's run this comparison between the 2 for 100 000 trials.
+
+### Success rate plot
 
 
 
+![tapdataplot](https://user-images.githubusercontent.com/100022747/210852709-777349b8-0516-4200-8238-144919ac3fc2.png)
 
+
+### Money distribution plot
+
+![moneyplot](https://user-images.githubusercontent.com/100022747/210852729-f79b9897-1e3f-4177-97f9-883fded0a44f.png)
+
+
+
+Execution time took 15.786s or so.
