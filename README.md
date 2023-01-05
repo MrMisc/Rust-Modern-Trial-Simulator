@@ -25,11 +25,9 @@ However, if there are more than 2 digits, this tells the code that we are to mul
 
 
 ```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+graph TB;
+    Pity v1 system?--Yes---1;
+    Pity v1 system?--No---1;
 ```
 
 
