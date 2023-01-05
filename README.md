@@ -115,3 +115,29 @@ Let's run this comparison between the 2 for 100 000 trials.
 
 
 Execution time took 15.786s or so.
+
+
+
+### Case Scenario 2
+
+Let us consider something slightly more interesting. Let us say, that we wished to, very informally, try to make a comparison between the significance between pity system versions 1 and 2. Just to recollect, version 1 of the pity system is whereby the seed is provided an automatic success after 2 consecutively distinct failures. Version 2 is one where the probability of a fixed trial is increased for every consecutive fail after a specific number of failures on that trial.
+
+Consider the following,
+
+**Scheme 1**: Prob = {0.05,0.3,0.005*}, Pity system v1 + Pity system v2 where fixed trial probability is multiplied by 3 for every consecutive failure after 3 repeats.
+
+**Scheme 2**: Prob = {0.05,0.005*,0.005*}, No pity system v1, but same pity system v2 parameters.
+
+Both schemes have the same pricing, {1.0,1.0,1.0}. Which simulation would fair better?
+
+### Success rate plot
+
+
+![tapdataplot](https://user-images.githubusercontent.com/100022747/210855388-48d67717-37ff-4a9e-8d68-59b552b2d86b.png)
+
+
+### Money distribution plot
+![moneyplot](https://user-images.githubusercontent.com/100022747/210855403-451b9dcc-dc8a-4d4f-90ec-6a04816833e1.png)
+
+
+There is not a clear, decisive winner if one were being particular about it. However, on the user side, it is far more beneficial for them to have a pity system version 2, WITHOUT any levels that penalise a loss with a level fall, as is evident by the spread of the 1st simulation, leading a greater percentage of seeds to much higher costs.
