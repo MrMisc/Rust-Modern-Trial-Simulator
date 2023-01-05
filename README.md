@@ -92,6 +92,7 @@ Let us compare 2 trial systems with the same probability and monetary scheme - 0
 Both use NO scheme except for pity system v2. Everything else is off. No user behaviour is considered either.
 
 **Scheme 1**: A probability of 0.05 is added everytime the seed fails above 5 consecutive times.
+
 **Scheme 2**: The probability of the trial is multiplied by 3 everytime the seed fails 3 consecutive times.
 
 This results in the methods being 
