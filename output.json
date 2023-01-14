@@ -1,0 +1,1 @@
+{"simulation1": {"method": 10000000, "runs": 6, "starting_point": 0, "probability": ["0.01"], "moneytree": [0.01], "falsecap": 5}, "simulation2": {"method": 10000000, "runs": 6, "starting_point": 0, "probability": ["0.3", "0.3", "0", "3"], "moneytree": [1.0, 1.0, 1.0], "falsecap": 5}, "trials": 100000}
