@@ -240,7 +240,7 @@ class App(customtkinter.CTk):
         },
         "trials":trials
         }
-        with open("E:/RustCalc/output.json", "w") as outfile:
+        with open("./output.json", "w") as outfile:
             json.dump(outputjson, outfile)       
         # app.destroy()
         subprocess.Popen("cargo run | py plot.py", shell=True) 
