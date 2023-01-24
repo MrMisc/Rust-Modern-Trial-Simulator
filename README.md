@@ -1,8 +1,11 @@
 # Rust Modern Trial Simulator
  Appended version of earlier trial simulator @ https://github.com/MrMisc/RustyTrialSimulator. Experimental. Contains probability values that increase as part of a modern pity system commonly found in Modern MMOs
 
+Activating this programme by the way, is done by typing ``py DataPointEntry.py`` in cmd prompt within the directory.
 
-Added an M series of methods. Code may or may not be quite buggy to run. 
+The following GUI pops up.
+
+![ATS](https://user-images.githubusercontent.com/100022747/214220301-b4e86fcc-3a50-40de-a74f-9abaf62eee36.PNG)
 
 
 ## M series | Methods
